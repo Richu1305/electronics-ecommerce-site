@@ -1,0 +1,39 @@
+{% extends 'common/base.html' %}
+{% block content %}
+<div class='container d-flex justify-content-center align-items-center vh-100'>
+    <div class="card p-4 shadow" style="width:350px">
+        <h3 class="text-center mb-3">Login</h3>
+        <form action="{% url 'login_user' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label>Username:</label><br>
+                <input type="text" name="username" placeholder="Enter Username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Password:</label>
+                <br>
+                <input type="password" name="password" placeholder="Enter Password" class="form-control" required>
+            </div>
+            <div class="mb-3"> <input type="submit" value="Login" class="btn form-control"
+                    style="background-color:blue">
+            </div>
+        </form>
+        <div class="text-center">
+            <a class="button button-account text-success" href="{% url 'form' %}">Create an Account</a>
+        </div>
+        <div class="text-center">
+            <a href="{% url 'password_reset_request' %}" class="text-info">Forgot Password?</a>
+            <div class="text-center mt-3">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+            ← Back 
+        </a>
+    </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+{% for msg in messages %}
+<script>alert('{{msg}}')</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

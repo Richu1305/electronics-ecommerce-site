@@ -1,0 +1,40 @@
+
+{% extends 'manager/pixel.html' %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+
+  <div class="card p-4 shadow text-center" style="width:400px">
+
+    <h3 class="mb-4">Admin Dashboard</h3>
+
+    <a href="{% url 'category' %}" class="btn btn-light border w-100 mb-2">
+      Add Category
+    </a>
+
+    <a href="{% url 'view' %}" class="btn btn-light border w-100 mb-2">
+      View Category
+    </a>
+
+    <a href="{% url 'add_product' %}" class="btn btn-light border w-100 mb-2">
+      Add Product
+    </a>
+
+    <a href="{% url 'view_product' %}" class="btn btn-light border w-100 mb-2">
+      View Products
+    </a>
+
+    <a href="{% url 'userorder' %}" class="btn btn-light border w-100 mb-2">
+      Orders
+    </a>
+
+    <a href="{% url 'logout' %}" class="btn btn-danger w-100 mt-3">
+      Logout
+    </a>
+
+  </div>
+
+</div>
+
+{% endblock %}

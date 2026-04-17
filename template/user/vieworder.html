@@ -1,0 +1,189 @@
+
+{% extends 'user/pixel1.html' %}
+
+{% block content %}
+
+<style>
+    .order-header {
+        background: linear-gradient(135deg, #f6f8fd 0%, #F5F5F7 100%);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .order-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+        pointer-events: none;
+    }
+
+    .order-card {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+
+    .order-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+    }
+
+    .order-img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 0.5rem;
+    }
+
+    .order-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1D1D1F;
+        margin-bottom: 0.35rem;
+    }
+
+    .order-info {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin-bottom: 0.2rem;
+    }
+
+    .order-total {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #10b981;
+        margin-top: 0.5rem;
+    }
+
+    .order-grand-total {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1D1D1F;
+        background: #ffffff;
+        padding: 1.2rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid #F5F5F7;
+        display: inline-block;
+        min-width: 300px;
+    }
+
+    .btn-details {
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    }
+
+    .btn-details:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
+        color: white;
+    }
+
+    .empty-orders {
+        background: white;
+        border-radius: 20px;
+        padding: 4rem 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+</style>
+
+<div class="container" style="margin-top: 100px; padding-top: 2rem;">
+
+    <div class="order-header">
+        <h3 class="fw-bold m-0" style="color: #000000; font-family: 'Jost', sans-serif;">All Orders <span style="color: #10b981;">📦</span></h3>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            
+            {% for i in orders %}
+            <div class="order-card p-3 p-md-4">
+                <div class="row align-items-center">
+                    
+                    <div class="col-auto">
+                        {% if i.product.image %}
+                            <img src="{{ i.product.image.url }}" class="order-img" alt="{{ i.product.Name }}">
+                        {% else %}
+                            <div class="order-img d-flex align-items-center justify-content-center text-muted small">
+                                No Image
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col">
+                        <h4 class="order-title">{{ i.product.Name }}</h4>
+                        <div class="order-info">Price: ₹{{ i.product.Price }} &nbsp;|&nbsp; Qty: {{ i.quantity }}</div>
+                        <div class="order-total">Total: ₹{{ i.total }}</div>
+                    </div>
+
+                    <div class="col-md-auto mt-3 mt-md-0 d-flex flex-wrap gap-2">
+                        <a href="{% url 'orderdetails' i.order.id %}" class="btn btn-details">
+                            View Details
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-orders">
+                <div class="mb-4">
+                    <span style="font-size: 5rem; opacity: 0.5;" class="text-muted">🛒</span>
+                </div>
+                <h3 class="fw-bold text-dark mb-3" style="font-family: 'Jost', sans-serif;">No Orders Found</h3>
+                <p class="text-muted mb-4 fs-5">Looks like you haven't placed any orders yet.</p>
+                <a href="{% url 'userhome' %}" class="btn btn-details" style="padding: 0.75rem 2.5rem; font-size: 1.1rem;">
+                    Start Shopping
+                </a>
+            </div>
+            {% endfor %}
+
+            {% if orders %}
+            <div class="text-center mt-5">
+                <div class="order-grand-total">
+                    Grand Total: <span style="color: #10b981;">₹{{ grand_total }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="text-center mt-5 mb-5">
+                <a href="{% url 'userhome' %}" class="btn btn-outline-secondary w-100">
+                    ← Back to Home
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+{% if messages %}
+{% for msg in messages %}
+<script>alert('{{ msg }}')</script>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

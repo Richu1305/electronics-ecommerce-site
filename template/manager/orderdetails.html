@@ -1,0 +1,53 @@
+{% extends 'manager/pixel.html' %}
+
+{% block content %}
+<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0" style="background-color: #f8f9fa;">
+                <div class="card-header bg-light text-dark rounded-top py-3 border-bottom">
+                    <h4 class="mb-0 text-center fw-bold" style="letter-spacing: 1px;">Order Details #{{ order.id }}</h4>
+                </div>
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Order Status: <span class="badge bg-primary px-3 py-2">{{ order.orderstatus }}</span></h5>
+                    
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        {% if order.orderstatus == 'pending' %}
+                        <div class="row mb-3 bg-white p-3 rounded shadow-sm">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-secondary">Expected Delivery Date</label>
+                                <input type="date" name="delivery_date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-secondary">Carrier/Courier</label>
+                                <input type="text" name="carrier" class="form-control" placeholder="e.g. FedEx" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-secondary">Tracking ID</label>
+                                <input type="text" name="tracking_id" class="form-control" placeholder="Enter tracking..." required>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" name="start_processing" class="btn btn-primary w-50 py-2 fw-bold text-uppercase" style="letter-spacing: 1px;">Start Processing</button>
+                            <button type="submit" name="cancel" class="btn btn-outline-danger w-50 py-2 fw-bold text-uppercase" style="letter-spacing: 1px;" onclick="return confirm('Are you sure you want to cancel this order?');">Cancel Order</button>
+                        </div>
+                        {% else %}
+                            <div class="bg-white p-4 rounded shadow-sm mb-4">
+                                <p class="mb-2"><span class="text-secondary fw-bold">Tracking ID:</span> <span class="ms-2 fw-medium">{{ order.tracking_id }}</span></p>
+                                <p class="mb-2"><span class="text-secondary fw-bold">Carrier:</span> <span class="ms-2 fw-medium">{{ order.carrier }}</span></p>
+                                <p class="mb-0"><span class="text-secondary fw-bold">Expected Delivery:</span> <span class="ms-2 fw-medium">{{ order.deliverydate }}</span></p>
+                            </div>
+
+                            {% if order.orderstatus != 'Canceled' and order.orderstatus != 'Completed' %}
+                                <button type="submit" name="cancel" class="btn btn-outline-danger mt-2 py-2 fw-bold w-100 text-uppercase" style="letter-spacing: 1px;" onclick="return confirm('Cancel this order?');">Cancel Order</button>
+                            {% endif %}
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

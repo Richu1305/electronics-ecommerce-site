@@ -1,0 +1,169 @@
+{% extends 'user/pixel1.html' %}
+
+{% block content %}
+
+<div class="container mt-5 pt-5">
+
+    <div class="card border-0 shadow-lg mx-auto" style="max-width:750px; border-radius:24px; overflow:hidden;">
+
+        <!-- Product Image Header -->
+        <div class="product-header position-relative" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 3rem 2rem; border-bottom: 1px solid #e2e8f0;">
+            
+            {% if product.stock > 0 %}
+                <span class="badge position-absolute shadow-sm" style="top: 20px; right: 20px; background: #10b981; border-radius: 50px; font-weight: 600; padding: 0.6rem 1rem; font-size: 0.85rem; letter-spacing: 0.5px;">In Stock</span>
+            {% else %}
+                <span class="badge position-absolute shadow-sm" style="top: 20px; right: 20px; background: #ef4444; border-radius: 50px; font-weight: 600; padding: 0.6rem 1rem; font-size: 0.85rem; letter-spacing: 0.5px;">Out of Stock</span>
+            {% endif %}
+            
+            <span class="badge position-absolute shadow-sm" style="top: 20px; left: 20px; background: #4f46e5; border-radius: 50px; font-weight: 600; padding: 0.6rem 1rem; font-size: 0.85rem; letter-spacing: 0.5px; text-transform: uppercase;">{{ product.category }}</span>
+
+            <div class="text-center mt-3">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="img-fluid" style="max-height: 320px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                {% else %}
+                    <div class="text-muted d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <p class="mb-0 fs-5 fw-bold" style="opacity: 0.5;">No Image Available</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Information Body -->
+        <div class="card-body p-4 p-md-5 bg-white">
+            
+            <h1 class="mb-2 fw-bold" style="font-family: 'Jost', sans-serif; color: #0f172a; font-size: 2.2rem; line-height: 1.2;">{{ product.Name }}</h1>
+            
+            <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold mb-0 me-3" style="color: #10b981; font-size: 2.5rem;">₹{{ product.Price }}</h2>
+            </div>
+            
+            <div class="product-description mb-5">
+                <h6 class="text-uppercase fw-bold text-muted mb-3" style="font-size: 0.85rem; letter-spacing: 1px;">Product Overview</h6>
+                <p class="text-secondary" style="font-size: 1.05rem; line-height: 1.7; font-weight: 400;">{{ product.Description }}</p>
+            </div>
+
+            {% if product.stock > 0 %}
+            <div class="add-to-cart-container p-4" style="background: #f8fafc; border-radius: 16px; border: 1px solid #f1f5f9;">
+                <form action="{% url 'addtocart' product.id %}" method="post" class="m-0">
+                    {% csrf_token %}
+                    <div class="row g-3 align-items-end">
+                        <div class="col-sm-4">
+                            <label class="form-label text-muted fw-bold mb-2" style="font-size: 0.85rem; letter-spacing: 0.5px;">QUANTITY</label>
+                            <input type="number" name="quantity" value="1" min="1" max="{{product.stock}}" class="form-control form-control-lg text-center fw-bold" style="border-radius: 12px; border: 2px solid #cbd5e1; color: #0f172a;">
+                        </div>
+                        <div class="col-sm-8">
+                            <button type="submit" class="btn btn-lg w-100 fw-bold d-flex align-items-center justify-content-center gap-2 add-cart-action-btn" style="background: #4f46e5; color: white; border-radius: 12px; padding: 1rem; border: none; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); transition: all 0.3s ease; letter-spacing: 0.5px;">
+                                <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                </svg>
+                                ADD TO CART
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <style>
+                .add-cart-action-btn:hover {
+                    background: #4338ca !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4) !important;
+                }
+                input[type=number]:focus {
+                    border-color: #4f46e5 !important;
+                    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
+                }
+            </style>
+            {% else %}
+                <div class="alert alert-danger text-center fw-bold rounded-4 m-0 p-4" style="border: 2px dashed #f87171; background: #fef2f2; color: #dc2626; font-size: 1.1rem;">
+                    Currently Out of Stock
+                </div>
+            {% endif %}
+
+        <hr class="my-5" style="opacity: 0.1;">
+
+       
+        <h5 class="mb-3 fw-bold" style="font-family: 'Jost', sans-serif; color: #111827;">Leave a Review</h5>
+
+        <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(to right bottom, #ffffff, #f8fafc); border-radius: 12px; overflow: hidden;">
+            <div class="card-body p-4">
+                <form action="{% url 'add_review' product.id %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted fw-medium" style="font-size: 0.9rem;">Your Comment</label>
+                        <textarea name="comment" class="form-control" rows="3" placeholder="Share your experience with this product..." style="border-radius: 10px; resize: none; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); transition: all 0.3s ease;"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-muted fw-medium" style="font-size: 0.9rem;">Rating</label>
+                        <select name="rating" class="form-select" style="border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.3s ease;">
+                            <option value="⭐">⭐ Poor</option>
+                            <option value="⭐⭐">⭐⭐ Fair</option>
+                            <option value="⭐⭐⭐">⭐⭐⭐ Good</option>
+                            <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ Very Good</option>
+                            <option value="⭐⭐⭐⭐⭐" selected>⭐⭐⭐⭐⭐ Excellent</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn w-100 fw-bold submit-review-btn" style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: white; border-radius: 10px; padding: 0.75rem; border: none; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); transition: all 0.3s ease; letter-spacing: 0.5px;">
+                        Submit Review
+                    </button>
+                    <style>
+                        .submit-review-btn:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important;
+                            color: white !important;
+                        }
+                        .form-control:focus, .form-select:focus {
+                            box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.15) !important;
+                            border-color: #63b3ed !important;
+                        }
+                    </style>
+                </form>
+            </div>
+        </div>
+
+        <hr class="my-4" style="opacity: 0.1;">
+
+        
+        <h5 class="mb-4 fw-bold" style="font-family: 'Jost', sans-serif; color: #111827;">Customer Reviews</h5>
+
+        <div class="reviews-container">
+            {% for p in r %}
+                <div class="review-card mb-3 p-3 position-relative" style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: transform 0.2s ease;">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="avatar-circle d-flex align-items-center justify-content-center me-3" style="width: 42px; height: 42px; background: #e0e7ff; color: #4f46e5; border-radius: 50%; font-weight: bold; font-size: 1.2rem;">
+                            {{ p.user.username|make_list|first|upper }}
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold" style="color: #1e293b; font-size: 1rem;">{{ p.user.username }}</h6>
+                            <div class="text-warning mt-1" style="font-size: 0.85rem; letter-spacing: 2px;">{{ p.rating }}</div>
+                        </div>
+                    </div>
+                    <p class="mb-0 text-secondary" style="font-size: 0.95rem; line-height: 1.5; padding-left: 58px;">{{ p.comment }}</p>
+                </div>
+            {% empty %}
+                <div class="text-center py-4" style="background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                    <span style="font-size: 2.5rem; opacity: 0.3;">💬</span>
+                    <p class="text-muted mt-2 mb-0 fw-medium">No reviews yet. Be the first to share your thoughts!</p>
+                </div>
+            {% endfor %}
+        </div>
+
+       
+        <div class="text-center mt-3">
+            <a href="{% url 'userhome' %}" class="btn btn-outline-secondary">
+                ← Back
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+

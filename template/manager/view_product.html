@@ -1,0 +1,77 @@
+{% extends 'manager/pixel.html' %}
+
+{% block content %}
+<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
+    <div class="card shadow border-0" style="background-color: #f8f9fa;">
+        <div class="card-header bg-light text-dark rounded-top py-3 border-bottom">
+            <h4 class="mb-0 text-center fw-bold" style="letter-spacing: 1px;">Manage Products</h4>
+        </div>
+        <div class="card-body p-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="text-center">No</th>
+                            <th scope="col" class="text-center">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col" class="text-end">Price</th>
+                            <th scope="col" class="text-center">Stock</th>
+                            <th scope="col" class="text-center mt-auto" style="min-width: 150px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        {% for i in data %}
+                        <tr>
+                            <td class="text-center fw-bold">{{ forloop.counter }}</td>
+                            <td class="text-center">
+                                {% if i.image %}
+                                    <div style="width: 60px; height: 60px; overflow: hidden; border-radius: 8px; margin: 0 auto;" class="shadow-sm border">
+                                        <img src="{{ i.image.url }}" alt="{{ i.Name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                {% else %}
+                                    <span class="badge bg-secondary">No Image</span>
+                                {% endif %}
+                            </td>
+                            <td class="fw-medium text-dark">{{ i.Name }}</td>
+                            <td><span class="badge bg-info text-dark rounded-pill">{{ i.category.Name }}</span></td>
+                            <td class="text-end text-success fw-bold">₹{{ i.Price }}</td>
+                            <td class="text-center">
+                                {% if i.stock > 10 %}
+                                    <span class="badge bg-success">{{ i.stock }}</span>
+                                {% elif i.stock > 0 %}
+                                    <span class="badge bg-warning text-dark">{{ i.stock }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'edit_prodct' i.id %}" class="btn btn-sm btn-outline-primary px-3 mb-1 w-100">Edit</a>
+                                <a href="{% url 'delete_product' i.id %}" class="btn btn-sm btn-outline-danger px-3 w-100" onclick="return confirm('Confirm deletion of this product?');">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">No products available in inventory.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-3">
+                <a href="{% url 'adminhome' %}" class="btn btn-outline-secondary">
+                    &larr; Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

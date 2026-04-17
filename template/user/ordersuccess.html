@@ -1,0 +1,40 @@
+{% extends 'user/pixel1.html' %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card shadow p-4 text-center" style="width:400px; border-radius:12px;">
+
+       
+        <h1 style="color:green;">✔️</h1>
+
+       
+        <h3 class="mb-3 text-success">Order Placed Successfully!</h3>
+
+        
+        <p><b>Total Amount:</b> ₹{{ order.total_amount }}</p>
+        <p><b>Order Date:</b> {{ order.orderdate }}</p>
+
+       
+        <div class="mt-4">
+
+            <a href="{% url 'vieworder' %}" class="btn btn-primary w-100 mb-2">
+                View Orders
+            </a>
+
+            <a href="{% url 'userhome' %}" class="btn btn-outline-secondary w-100">
+                Continue Shopping
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+

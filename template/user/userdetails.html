@@ -1,0 +1,57 @@
+
+{% extends 'user/pixel1.html' %}
+
+{% block content %}
+
+<div class="container mt-5 pt-5 d-flex justify-content-center"> 
+
+    <div class="card p-4 shadow text-center" style="width:500px; border-radius:12px;">
+
+        <h3 class="mb-4">User Profile</h3>
+
+        
+        {% if user_details.profile_photo %}
+            <img src="{{ user_details.profile_photo.url }}" 
+                 width="120" 
+                 class="mb-3"
+                 style="border-radius:50%; object-fit:cover;">
+        {% else %}
+            <div class="mb-3">
+                <span style="font-size:60px;">👤</span>
+            </div>
+        {% endif %}
+
+        
+        <div class="text-start">
+
+            <p><b>First Name:</b> {{ request.user.first_name }}</p>
+            <p><b>Last Name:</b> {{ request.user.last_name }}</p>
+            <p><b>Username:</b> {{ request.user.username }}</p>
+            <p><b>Email:</b> {{ request.user.email }}</p>
+            <p><b>Phone:</b> {{ user_details.phone }}</p>
+            <p><b>Address:</b> {{ user_details.address }}</p>
+            <p><b>City:</b> {{ user_details.city }}</p>
+            <p><b>State:</b> {{ user_details.state }}</p>
+            <p><b>Postal Code:</b> {{ user_details.postal_code }}</p>
+
+        </div>
+
+        
+        <div class="mt-4">
+
+            <a href="{% url 'edituser' %}" class="btn btn-outline-primary w-100 mb-2">
+                Edit Profile
+            </a>
+
+            <a href="{% url 'userhome' %}" class="btn btn-outline-secondary w-100">
+                ← Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

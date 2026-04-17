@@ -1,0 +1,359 @@
+{% extends 'user/pixel1.html' %}
+{% block content %}
+
+<style>
+    /* Premium Design Enhancements */
+    body {
+        background-color: #f8f9fa;
+        /* soften background slightly */
+    }
+
+    .search-section {
+        background: linear-gradient(135deg, #f6f8fd 0%, #F5F5F7 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .search-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, #0fa61400 70%);
+        pointer-events: none;
+    }
+
+    .custom-input {
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(211, 17, 17, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .custom-input:focus {
+        box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.15);
+        border-color: #63b3ed;
+    }
+
+    .custom-btn {
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        border: none;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        color: white;
+    }
+
+    .custom-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        color: white;
+    }
+
+    /* Product Cards */
+    .product-card {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-img-wrapper {
+        position: relative;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #F5F5F7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 220px;
+    }
+
+    .product-img-wrapper img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-img-wrapper img {
+        transform: scale(1.08);
+    }
+
+    .wishlist-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: white;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+
+    .wishlist-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .product-info {
+        padding: 1.5rem;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1D1D1F;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #10b981;
+        margin-bottom: 1.25rem;
+    }
+
+    .view-details-btn {
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        width: 100%;
+        border: 2px solid #121d32;
+        color: #475569;
+        background: transparent;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .product-card:hover .view-details-btn,
+    .view-details-btn:hover {
+        background: #3b82f6;
+        border-color: #3b82f6;
+        color: white;
+    }
+
+    .buy-now-btn {
+        border-radius: 10px;
+        padding: 0.5rem 0.5rem;
+        font-weight: 500;
+        width: 100%;
+        border: 2px solid #121d32;
+        color: #475569;
+        background: transparent;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .product-card:hover .buy-now-btn,
+    .buy-now-btn:hover {
+        background: #10b981;
+        border-color: #10b981;
+        color: white;
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Quick Categories */
+    .quick-category {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .quick-category:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .quick-category svg {
+        color: #334155;
+        transition: all 0.3s ease;
+    }
+
+    .quick-category:hover svg {
+        color: #4f46e5;
+    }
+</style>
+
+<div class="container" style="margin-top: 100px; padding-top: 2rem;">
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <h3 class="mb-4 text-center fw-bold text-dark" style="font-family: 'Jost', sans-serif;">Discover Products</h3>
+        <form method="GET" class="row justify-content-center g-3">
+            <div class="col-md-5">
+                <input type="text" name="search" class="form-control custom-input"
+                    placeholder="Search for something amazing..." value="{{request.GET.search}}">
+            </div>
+
+            <div class="col-md-4">
+                <select name="category" class="form-select custom-input">
+                    <option value="">All Categories</option>
+                    {% for k in c %}
+                    <option value="{{k.id}}" {% if request.GET.category == k.id|stringformat:"s" %}selected{% endif %}>
+                        {{k.Name}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2 d-grid">
+                <button class="btn custom-btn w-100">Search</button>
+            </div>
+        </form>
+
+        <!-- Quick Categories -->
+        <div class="d-flex justify-content-center gap-4 gap-md-5 mt-5">
+            <a href="?search=For+You" class="text-decoration-none quick-category">
+                <svg width="40" height="40" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                    <rect x="4" y="7" width="16" height="14" rx="2" ry="2" />
+                    <path d="M9 7V4a3 3 0 0 1 6 0v3" />
+                    <path d="M4 15h16v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4z" fill="#facc15" stroke="none" opacity="0.9" />
+                </svg>
+                <span class="text-dark fw-medium mt-1" style="font-size: 0.95rem;">For You</span>
+            </a>
+
+            <a href="?search=Mobile" class="text-decoration-none quick-category">
+                <svg width="40" height="40" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                    <rect x="6" y="2" width="12" height="20" rx="2" ry="2" />
+                    <path d="M6 16h12v4a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-4z" fill="#facc15" stroke="none" opacity="0.9" />
+                    <line x1="12" y1="18" x2="12.01" y2="18" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                </svg>
+                <span class="text-dark fw-medium mt-1" style="font-size: 0.95rem;">Gadgets</span>
+            </a>
+
+            <a href="?search=Electronics" class="text-decoration-none quick-category">
+                <svg width="40" height="40" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                    <rect x="2" y="4" width="20" height="14" rx="2" ry="2" />
+                    <path d="M2 14h20v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2z" fill="#facc15" stroke="none" opacity="0.9" />
+                    <line x1="8" y1="22" x2="16" y2="22" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <line x1="12" y1="18" x2="12" y2="22" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+                <span class="text-dark fw-medium mt-1" style="font-size: 0.95rem;">Electronics</span>
+            </a>
+
+            <a href="?search=Appliances" class="text-decoration-none quick-category">
+                <svg width="40" height="40" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                    <rect x="2" y="4" width="20" height="13" rx="2" ry="2" />
+                    <line x1="2" y1="14" x2="22" y2="14" />
+                    <polyline points="7 21 12 17 17 21" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M2 14h20v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1z" fill="#facc15" stroke="none" opacity="0.9" />
+                </svg>
+                <span class="text-dark fw-medium mt-1" style="font-size: 0.95rem;">Appliances</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <h3 class="mb-4 fw-bold text-dark" style="font-family: 'Jost', sans-serif;">All Products</h3>
+    <div class="row">
+        {% for i in data %}
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+            <div class="product-card h-100">
+
+                <!-- Wishlist Button -->
+                {% if i.id in w %}
+                <a href="{% url 'add_to_wishlist' i.id %}" class="wishlist-btn" title="Remove from Wishlist">
+                    <span style="font-size: 1.2rem; color: #ef4444; line-height: 1;">❤️</span>
+                </a>
+                {% else %}
+                <a href="{% url 'add_to_wishlist' i.id %}" class="wishlist-btn" title="Add to Wishlist">
+                    <span style="font-size: 1.2rem; color: #94a3b8; line-height: 1;">🤍</span>
+                </a>
+                {% endif %}
+
+                <!-- Image -->
+                <div class="product-img-wrapper">
+                    {% if i.image %}
+                    <img src="{{ i.image.url }}" alt="{{ i.Name }}">
+                    {% else %}
+                    <div class="text-muted d-flex align-items-center justify-content-center h-100">
+                        <p class="m-0">No Image Available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Info -->
+                <div class="product-info text-center">
+                    <h5 class="product-title" title="{{ i.Name }}">{{ i.Name }}</h5>
+                    <div class="product-price">₹{{ i.Price }}</div>
+                    <div class="d-flex gap-2 justify-content-center align-items-stretch">
+                        <a href="{% url 'productdetails' i.id %}"
+                            class="btn view-details-btn w-50 d-flex flex-column align-items-center justify-content-center text-center lh-sm">
+                            View<br>Details
+                        </a>
+                        <form action="{% url 'addtocart' i.id %}" method="post" class="w-50 m-0 d-flex">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="buy_now" value="true">
+                            <button type="submit"
+                                class="btn buy-now-btn flex-grow-1 d-flex flex-column align-items-center justify-content-center text-center lh-sm">
+                                Buy<br>Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state text-center">
+                <div class="mb-3">
+                    <span style="font-size: 4rem; opacity: 0.5;">🔍</span>
+                </div>
+                <h3 class="fw-bold text-muted">No Products Found</h3>
+                <p class="text-muted mb-0">Try adjusting your search or filter to find what you're looking for.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

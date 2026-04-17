@@ -1,0 +1,96 @@
+
+{% extends 'manager/pixel.html' %}
+
+{% block content %}
+
+<div class="container mt-5 pt-5"> 
+
+    <div class="card p-4 shadow">
+
+        <h3 class="text-center mb-4">User Orders</h3>
+
+        <!-- Filter Buttons -->
+        <div class="text-center mb-4">
+            <a href="?status=pending" class="btn btn-light border me-1">Pending</a>
+            <a href="?status=Processing" class="btn btn-light border me-1">Processing</a>
+            <a href="?status=Completed" class="btn btn-light border me-1">Completed</a>
+            <a href="?status=Canceled" class="btn btn-light border me-1">Cancelled</a>
+            <a href="?status=all" class="btn btn-dark">All</a>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in orders %}
+                    <tr>
+
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.user.username }}</td>
+
+                        <!-- Status with color -->
+                        <td>
+                            {% if item.orderstatus == 'pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif item.orderstatus == 'Processing' %}
+                                <span class="badge bg-info text-dark">Processing</span>
+                            {% elif item.orderstatus == 'Completed' %}
+                                <span class="badge bg-success">Completed</span>
+                            {% else %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ item.payment_method }}</td>
+                        <td>₹{{ item.total_amount }}</td>
+
+                        <!-- Actions -->
+                        <td>
+                            {% if item.orderstatus == 'pending' %}
+                                <a href="{% url 'orderdetails_for_manager' item.id %}" class="btn btn-light border btn-sm">
+                                    Details
+                                </a>
+
+                            {% elif item.orderstatus == 'Processing' %}
+                                <a href="{% url 'cancel_order' item.id %}" class="btn btn-danger btn-sm">
+                                    Cancel
+                                </a>
+                                <a href="{% url 'Completeorder' item.id %}" class="btn btn-success btn-sm">
+                                    Complete
+                                </a>
+
+                            {% else %}
+                                <span class="text-muted">{{ item.orderstatus }}</span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+              <!-- Back Button -->
+    <div class="text-center mt-3">
+        <a href="{% url 'adminhome' %}" class="btn btn-outline-secondary">
+            ← Back to Dashboard
+        </a>
+    </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

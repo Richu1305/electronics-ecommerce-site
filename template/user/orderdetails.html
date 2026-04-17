@@ -1,0 +1,54 @@
+
+{% extends 'user/pixel1.html' %}
+
+{% block content %}
+
+<div class="container mt-5 pt-5 d-flex justify-content-center">
+
+    <div class="card shadow p-4" style="width:500px; border-radius:12px;">
+
+        <h3 class="text-center mb-4">Order Details</h3>
+
+        
+        <p><b>Order ID:</b> {{ order.id }}</p>
+        <p><b>User:</b> {{ order.user }}</p>
+        <p><b>Order Date:</b> {{ order.orderdate }}</p>
+        <p><b>Delivery Date:</b> {{ order.deliverydate }}</p>
+
+        <hr>
+
+        <p><b>Order Status:</b> 
+            <span class="badge bg-info">{{ order.orderstatus }}</span>
+        </p>
+
+        <p><b>Payment Status:</b> 
+            <span class="badge bg-success">{{ order.paymentstatus }}</span>
+        </p>
+
+        <p><b>Payment Method:</b> {{ order.payment_method }}</p>
+
+        <hr>
+
+        <p><b>Tracking ID:</b> {{ order.tracking_id }}</p>
+        <p><b>Carrier:</b> {{ order.carrier }}</p>
+
+        <hr>
+
+        <h5 class="text-end">Total: ₹{{ order.total_amount }}</h5>
+
+       
+        <div class="text-center mt-4">
+            <a href="{% url 'vieworder' %}" class="btn btn-outline-secondary">
+                ← Back to Orders
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+

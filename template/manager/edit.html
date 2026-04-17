@@ -1,0 +1,36 @@
+{% extends 'manager/pixel.html' %}
+
+{% block content %}
+<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0" style="background-color: #f8f9fa;">
+                <div class="card-header bg-light text-dark rounded-top py-3 border-bottom">
+                    <h4 class="mb-0 text-center fw-bold" style="letter-spacing: 1px;">Edit Category</h4>
+                </div>
+                <div class="card-body p-4">
+                    {% for cat in edata %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Category Name</label>
+                            <input type="text" name="Name" class="form-control" value="{{ cat.Name }}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark">Description</label>
+                            <textarea name="Description" class="form-control" rows="3" required>{{ cat.Description }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 text-uppercase fw-bold shadow-sm" style="letter-spacing: 1px;">Update Category</button>
+                    </form>
+                    {% endfor %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'view' %}" class="btn btn-outline-secondary">
+                            &larr; Back to View Category
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
