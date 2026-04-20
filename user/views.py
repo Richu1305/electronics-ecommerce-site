@@ -472,9 +472,12 @@ def password_reset_request(request):
              'user': user,
              'reset_url': reset_url,
          })
-         send_mail(subject, message,settings.DEFAULT_FROM_EMAIL, [user.email])
-         messages.success(request, "A password reset link has been sent to your email.")
-         return render(request,'common/password_reset_email.html')
+         try:
+             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], html_message=message)
+             messages.success(request, "A password reset link has been sent to your email.")
+         except Exception as e:
+             messages.error(request, f"Failed to send email: {e}")
+         return redirect('login_user')
     return render(request,'common/password_reset_form.html')
 
 def password_reset_confirm(request, uidb64, token):
@@ -494,14 +497,15 @@ def password_reset_confirm(request, uidb64, token):
                       user.password = make_password(password1)
                       user.save()
                       messages.success(request,'your password has been reset')
-                      return render(request,'common/password_reset_confirm.html')
+                      return redirect('login_user')
                   else:
                       messages.error(request,'password do not match')
-                      return render(request,'common/password_reset_form.html')
+                      return render(request,'common/password_reset_confirm.html')
                           
              return render(request,'common/password_reset_confirm.html')
         else:
-           return render(request,'common/password_reset_form.html')
+           messages.error(request, 'Invalid or expired token')
+           return redirect('password_reset_request')
        
        
        
